@@ -1,13 +1,11 @@
 ---
 name: Bug report
 about: 버그 수정
-title: ''
+title: "[ Fix ]"
 labels: ''
 assignees: ''
 
 ---
-
-[Fix]
 
 ## 🚀 Description
 

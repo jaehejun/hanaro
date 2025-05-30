@@ -1,13 +1,11 @@
 ---
 name: Feature request
 about: 기능 추가
-title: ''
+title: "[ Feat ]"
 labels: ''
 assignees: ''
 
 ---
-
-[Feat]
 
 ## 🚀 Description
 
@@ -15,5 +13,5 @@ assignees: ''
 ## 🛠 Issue
 
 
-##✅ To-do
+## ✅ To-do
 - [ ]
