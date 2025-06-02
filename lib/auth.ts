@@ -5,7 +5,6 @@
 
 // lib/auth.ts
 
-// lib/auth.ts
 import { AuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -49,7 +48,36 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }) {
+      if (account?.provider === "github") {
+
+        const githubProfile = profile as any;
+
+        const existingUser = await prisma.user.findUnique({
+          where: { email: token.email! },
+        });
+
+        if (!existingUser) {
+          const newUser = await prisma.user.create({
+            data: {
+              email: token.email!,
+              nickname: githubProfile.login,
+              githubId: githubProfile.node_id?.toString(),
+            },
+          });
+
+          token.id = newUser.id;
+          token.email = newUser.email;
+          token.nickname = newUser.nickname;
+          token.role = newUser.role;
+        } else {
+          token.id = existingUser.id;
+          token.email = existingUser.email;
+          token.nickname = existingUser.nickname;
+          token.role = existingUser.role;
+        }
+      }
+      // 일반 로그인 처리
       if (user) {
         token.id = user.id;
         token.email = user.email;
