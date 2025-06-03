@@ -4,7 +4,16 @@
 // 메인 페이지의 내용(Conetent)을 담는 컴포넌트
 // 자식 컴포넌트 역할
 
-export default function Home() {
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+
+export default async function Home() {
+
+  // const session = await getServerSession(authOptions);
+
+  // if (!session) {
+  //   return <p>로그인을 해주세요</p>;
+  // }
   return (
     <div>
       {/* 메인 페이지 내용 */}

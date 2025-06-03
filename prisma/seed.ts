@@ -52,13 +52,6 @@ async function main() {
         { name: 'Etc' },
     ];
 
-    // const defaultPosts = [
-    //     { title: 'JavaScript 기본 게시글', content: 'JavaScript를 알아보자', categoryName: 'JavaScript', authorId: adminUser.id },
-    //     { title: 'TypeScript 기본 게시글', content: 'TypeScript를 알아보자.', categoryName: 'TypeScript', authorId: adminUser.id },
-    //     { title: 'React 기본 게시글', content: 'React를 알아보자', categoryName: 'React', authorId: adminUser.id },
-    //     { title: 'Etc 기본 게시글', content: 'etc를 알아보자', categoryName: 'etc', authorId: adminUser.id },
-    //   ];
-
     for (const category of defaultCategories) {
         const createdCategory = await prisma.category.upsert({
             where: { name: category.name },

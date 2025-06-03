@@ -1,10 +1,12 @@
 // app/layout.tsx
 
-// 최상위 레이아웃으로 모든 페이지에 적용되는 레이아웃을 정의
-// 웹사이트 기본적인 구조 정의
-// 부모 컴포넌트 역할
+// app/layout.tsx
 
-// app/layout.tsx (최상위 레이아웃)
+import Link from 'next/link';
+
+export const metadata = {
+  title: '나만의 기술 블로그',
+};
 
 export default function RootLayout({
   children,
@@ -14,22 +16,23 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <header>
-          {/* 모든 페이지에 공통으로 보여지는 헤더 */}
-          <h1>My Tech Blog</h1>
-          <nav>
-            {/* 네비게이션 메뉴 */}
-            <a href="/">홈</a>
-            <a href="/category/js">JavaScript</a>
-            <a href="/category/ts">TypeScript</a>
-            <a href="/category/react">React</a>
-            <a href="/category/etc">etc</a>
+        <header style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>
+          <h1>나만의 기술 블로그</h1>
+          <nav style={{ marginTop: '1rem' }}>
+            <Link href="/" style={{ marginRight: '15px' }}>홈</Link>
+            <Link href="/auth/signin" style={{ marginRight: '15px' }}>로그인</Link>
+            <Link href="/auth/signup" style={{ marginRight: '15px' }}>회원가입</Link>
+            <Link href="/auth/signout" style={{ marginRight: '15px' }}>로그아웃</Link>
+            <Link href="/admin">관리자 페이지</Link>
           </nav>
         </header>
-        <main>{children}</main> {/* page.tsx 컴포넌트가 렌더링되는 위치 */}
-        <footer>
-          {/* 모든 페이지에 공통으로 보여지는 푸터 */}
-          <p>© 2024 My Tech Blog</p>
+
+        <main style={{ padding: '1rem' }}>
+          {children}
+        </main>
+
+        <footer style={{ padding: '1rem', borderTop: '1px solid #ccc' }}>
+          <p>© 2025 나만의 기술 블로그</p>
         </footer>
       </body>
     </html>

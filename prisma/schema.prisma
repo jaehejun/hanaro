@@ -58,11 +58,11 @@ model Post {
   title       String
   content     String
 
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryName String
+  category    Category @relation(fields: [categoryName], references: [name], onDelete: Cascade)
   
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id])
+  authorName   String
+  author      User     @relation(fields: [authorName], references: [nickname], onDelete: Cascade)
 
   reactions   PostReaction[]
 

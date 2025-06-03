@@ -54,13 +54,13 @@ export const authOptions: AuthOptions = {
         const githubProfile = profile as any;
 
         const existingUser = await prisma.user.findUnique({
-          where: { email: token.email! },
+          where: { email: githubProfile.email },
         });
 
         if (!existingUser) {
           const newUser = await prisma.user.create({
             data: {
-              email: token.email!,
+              email: githubProfile.email,
               nickname: githubProfile.login,
               githubId: githubProfile.node_id?.toString(),
             },
