@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Post = { id: string; title: string; content: string };
 type User = { email: string; nickname: string, role: string };
@@ -9,7 +10,12 @@ const categories = ['javascript', 'typescript', 'react', 'etc'];
 
 type Tab = 'posts' | 'users';
 
+
 export default function AdminPage() {
+
+  // 라우터 훅 사용
+  const router = useRouter();
+
   // 탭 상태
   const [activeTab, setActiveTab] = useState<Tab>('posts');
 
@@ -23,6 +29,20 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchEmail, setSearchEmail] = useState('');
   const [searchNickname, setSearchNickname] = useState('');
+
+  // 관리자 권한 확인
+  useEffect(() => {
+    async function checkAdmin() {
+      const res = await fetch('/api/auth/session');
+      const session = await res.json();
+      if (!session || !session.user || session.user.role !== 'ADMIN') {
+        // 관리자 권한이 없으면 로그인 페이지로 리다이렉트
+        router.push('/api/auth/signin');
+        return;
+      }
+    }
+    checkAdmin();
+    }, [router]);
 
   // --- 게시글 함수 ---
 

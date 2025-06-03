@@ -20,9 +20,9 @@ export default function RootLayout({
           <h1>나만의 기술 블로그</h1>
           <nav style={{ marginTop: '1rem' }}>
             <Link href="/" style={{ marginRight: '15px' }}>홈</Link>
-            <Link href="/auth/signin" style={{ marginRight: '15px' }}>로그인</Link>
-            <Link href="/auth/signup" style={{ marginRight: '15px' }}>회원가입</Link>
-            <Link href="/auth/signout" style={{ marginRight: '15px' }}>로그아웃</Link>
+            <Link href="/api/auth/signin" style={{ marginRight: '15px' }}>로그인</Link>
+            <Link href="/signup" style={{ marginRight: '15px' }}>회원가입</Link>
+            <Link href="/api/auth/signout" style={{ marginRight: '15px' }}>로그아웃</Link>
             <Link href="/admin">관리자 페이지</Link>
           </nav>
         </header>

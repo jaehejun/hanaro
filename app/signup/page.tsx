@@ -41,45 +41,4 @@ export default function SignupPage() {
     );
 }
 
-// const [email, setEmail] = useState('');
-// const [password, setPassword] = useState('');
-// const [nickname, setNickname] = useState('');
-// const router = useRouter();
-
-// const handleSignup = async (
-//     e: React.FormEvent,    
-//     email:string,
-//     password:string,
-//     nickname:string,
-//     ) => { 
-//         e.preventDefault();    
-
-//     const res = await fetch('/api/auth/signup', {
-//         method: 'POST',    
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ email, password, nickname }),
-//     });
-    
-//     if (res.ok) {
-//         // 회원 가입 성공 시 로그인 페이지로 리다이렉트    
-//         router.push('/auth/signin');
-//     };
-
-// export default function SignupPage() {
-    
-
-//         return (
-//             <form onSubmit={handleSignup}>    
-//                 <input placeholder="이메일" onChange={(e) => setEmail(e.target.value)} />
-//                 <input placeholder="비밀번호" onChange={(e) => setPassword(e.target.value)} type="password" />
-//                 <input placeholder="닉네임" onChange={(e) => setNickname(e.target.value)} />
-//                 <button type="submit">회원 가입</button>
-//             </form>
-//         );
-//     }
-// }
-
-// /app/signup/page.tsx
-// 회원 가입 페이지 UI를 정의하는 컴포넌트
-
 

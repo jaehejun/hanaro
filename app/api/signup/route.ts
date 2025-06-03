@@ -8,12 +8,10 @@ import prisma from '@/lib/prisma/prisma';
 import { hash } from 'bcrypt';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req:NextRequest, res:NextResponse) {
+export async function POST(req:NextRequest) {
     if (req.method !== 'POST') {
-        console.log('@@@@@@@@@@@@!POST!@@@@@@@@@@@@@@@');
         return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
     }
-    console.log('@@@@@@@@@@@@회원가입!@@@@@@@@@@@@@@@');
     try {
         const { email, password, nickname } = await req.json();
 

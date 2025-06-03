@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
         if (email) {
             filters.push({ email: { contains: email } });
         }
-        whereCondition = { AND: filters };
+        whereCondition = { OR: filters };
     }
 
     try {

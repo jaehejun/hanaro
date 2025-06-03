@@ -4,21 +4,77 @@
 // 메인 페이지의 내용(Conetent)을 담는 컴포넌트
 // 자식 컴포넌트 역할
 
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
+'use client';
 
-export default async function Home() {
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-  // const session = await getServerSession(authOptions);
+type Post = { id: string; title: string; content: string };
+const categories = ['javascript', 'typescript', 'react', 'etc'];
 
-  // if (!session) {
-  //   return <p>로그인을 해주세요</p>;
-  // }
+export default function HomePage() {
+  const router = useRouter();
+  const [latestPosts, setLatestPosts] = useState<Record<string, Post | null>>({});
+
+  useEffect(() => {
+    async function fetchLatestPosts() {
+      const results: Record<string, Post | null> = {};
+      for (const category of categories) {
+        const res = await fetch(`/api/categories/${category}`);
+        if (res.ok) {
+          const data: Post[] = await res.json();
+          results[category] = data.length > 0 ? data[data.length-1] : null;
+        } else {
+          results[category] = null;
+        }
+      }
+      console.log('Latest posts:', results);
+      setLatestPosts(results);
+    }
+    fetchLatestPosts();
+  }, []);
+
   return (
-    <div>
-      {/* 메인 페이지 내용 */}
-      <h2>최신 글 목록</h2>
-      {/* 여기에 최신 글 목록 컴포넌트 */}
+    <div style={{ display: 'flex', gap: '2rem', padding: '1rem' }}>
+      {categories.map((category) => (
+        <div key={category} style={{ cursor: 'pointer', width: '150px' }} onClick={() => router.push(`/categories/${category}`)}>
+          {/* 카테고리 이름 - 박스 바깥 위 */}
+          <div
+            style={{
+              marginBottom: '0.5rem',
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              textTransform: 'capitalize',
+              userSelect: 'none',
+            }}
+          >
+            {category}
+          </div>
+
+          {/* 최신 글 제목 들어가는 정사각형 박스 */}
+          <div
+            style={{
+              width: '150px',
+              height: '150px',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '0.5rem',
+              boxSizing: 'border-box',
+              textAlign: 'center',
+              fontSize: '0.95rem',
+              color: '#333',
+              overflow: 'hidden',
+              wordBreak: 'break-word',
+            }}
+            title={latestPosts[category]?.title ?? ''}
+          >
+            {latestPosts[category]?.title ?? '게시글 없음'}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
