@@ -1,103 +1,80 @@
-import Image from "next/image";
+// app/page.tsx
+// app/ 디렉토리 안에서 특정 경로에 대한 UI를 렌더링하는 컴포넌트 정의하는 파일
+// 루트 경로(메인페이지)에 접속했을 때 보여지는 UI 담당
+// 메인 페이지의 내용(Conetent)을 담는 컴포넌트
+// 자식 컴포넌트 역할
 
-export default function Home() {
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+type Post = { id: string; title: string; content: string };
+const categories = ['Javascript', 'Typescript', 'React', 'Etc'];
+
+export default function HomePage() {
+  const router = useRouter();
+  const [latestPosts, setLatestPosts] = useState<Record<string, Post | null>>({});
+
+  useEffect(() => {
+    async function fetchLatestPosts() {
+      const results: Record<string, Post | null> = {};
+      for (const category of categories) {
+        const res = await fetch(`/api/categories/${category}`);
+        if (res.ok) {
+          const data: Post[] = await res.json();
+          results[category] = data.length > 0 ? data[data.length-1] : null;
+        } else {
+          results[category] = null;
+        }
+      }
+      console.log('Latest posts:', results);
+      setLatestPosts(results);
+    }
+    fetchLatestPosts();
+  }, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div style={{ display: 'flex', gap: '2rem', padding: '1rem' }}>
+      {categories.map((category) => (
+        <div key={category} style={{ cursor: 'pointer', width: '150px' }} onClick={() => router.push(`/categories/${category}`)}>
+          {/* 카테고리 이름 - 박스 바깥 위 */}
+          <div
+            style={{
+              marginBottom: '0.5rem',
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              textTransform: 'capitalize',
+              userSelect: 'none',
+            }}
+          >
+            {category}
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* 최신 글 제목 들어가는 정사각형 박스 */}
+          <div
+            style={{
+              width: '150px',
+              height: '150px',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '0.5rem',
+              boxSizing: 'border-box',
+              textAlign: 'center',
+              fontSize: '0.95rem',
+              color: '#333',
+              overflow: 'hidden',
+              wordBreak: 'break-word',
+            }}
+            title={latestPosts[category]?.title ?? ''}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {latestPosts[category]?.title ?? '게시글 없음'}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      ))}
     </div>
   );
 }
