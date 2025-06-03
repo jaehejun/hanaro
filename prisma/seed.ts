@@ -2,9 +2,15 @@ import prisma from '@/lib/prisma/prisma';
 import { Role } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
+import dotenv from 'dotenv';
+dotenv.config({path:'.env.local'});
+
 async function main() {
-    const adminEmail = process.env.ADMIN_EMAIL || 'super@hanaro.com';
+    const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
+
+    console.log('관리자 이메일:', adminEmail);
+    console.log('pass:', adminPassword);
 
     if (!adminPassword) {
         throw new Error('관리자 비밀번호가 설정되지 않았습니다.');
@@ -63,6 +69,18 @@ async function main() {
         console.log(`기본 카테고리 생성 완료 : ${createdCategory.name}`);
     }
 
+    const stopwords = [
+        '은', '는', '이', '가', '을', '를', '에', '의', '와', '과',
+        '도', '으로', '로', '에서', '에게', '한', '하다', '그리고', '하지만', '또한'
+    ];
+
+    for (const word of stopwords) {
+        await prisma.stopword.upsert({
+            where: { word: word },
+            update: {},
+            create: {  word: word},
+        });
+    }
 }
 
 main()

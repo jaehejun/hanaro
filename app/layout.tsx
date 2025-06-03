@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import SearchForm from '@/components/SearchForm';
 
 export const metadata = {
   title: '나만의 기술 블로그',
@@ -22,6 +23,8 @@ export default function RootLayout({
             <Link href="/api/auth/signout" style={{ marginRight: '15px' }}>로그아웃</Link>
             <Link href="/admin">관리자 페이지</Link>
           </nav>
+            {/* 검색창 추가 */}
+            <SearchForm />
         </header>
 
         <main style={{ padding: '1rem' }}>
