@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 type Post = { id: string; title: string; content: string };
-type User = { id: string; email: string; nickname: string };
+type User = { email: string; nickname: string, role: string };
 
 const categories = ['javascript', 'typescript', 'react', 'etc'];
 
@@ -90,7 +90,7 @@ export default function AdminPage() {
   // --- 사용자 함수 ---
 
   const fetchUsers = async (email?: string, nickname?: string) => {
-    let url = '/api/users';
+    let url = '/api/admin/users';
     const params = new URLSearchParams();
     if (email) params.append('email', email);
     if (nickname) params.append('nickname', nickname);
@@ -259,9 +259,9 @@ export default function AdminPage() {
             <table border={1} cellPadding={6} style={{ borderCollapse: 'collapse', width: '100%' }}>
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Email</th>
                   <th>Nickname</th>
+                  <th>ROLE</th>
                 </tr>
               </thead>
               <tbody>
@@ -273,10 +273,10 @@ export default function AdminPage() {
                   </tr>
                 ) : (
                   users.map((user) => (
-                    <tr key={user.id}>
-                      <td>{user.id}</td>
+                    <tr key={user.email}>
                       <td>{user.email}</td>
                       <td>{user.nickname}</td>
+                      <td>{user.role}</td>
                     </tr>
                   ))
                 )}
@@ -288,169 +288,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-
-// // app/admin/page.tsx
-// // 관리자 페이지
-
-// 'use client';
-
-// import { useEffect, useState } from 'react';
-
-// const categories = ['javascript', 'typescript', 'react', 'etc'];
-
-// export default function AdminPage() {
-//   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-//   const [posts, setPosts] = useState<any[]>([]);
-//   const [newPost, setNewPost] = useState({ title: '', content: '' });
-//   const [editPost, setEditPost] = useState<{ id: string; title: string; content: string } | null>(null);
-
-//   const fetchPosts = async (category: string) => {
-//     const res = await fetch(`/api/categories/${category}`);
-//     if (res.ok) {
-//       const data = await res.json();
-//       setPosts(data);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (!selectedCategory) return;
-//     fetchPosts(selectedCategory);
-//     setEditPost(null); // 카테고리 바뀌면 수정폼 초기화
-//   }, [selectedCategory]);
-
-//   // 새 게시글 작성
-//   const handlePostSubmit = async () => {
-//     if (!selectedCategory) return;
-//     const res = await fetch(`/api/categories/${selectedCategory}`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ ...newPost, category: selectedCategory }),
-//     });
-//     if (res.ok) {
-//       setNewPost({ title: '', content: '' });
-//       await fetchPosts(selectedCategory);
-//     }
-//   };
-
-//   // 게시글 삭제
-//   const handleDelete = async (post_id: string) => {
-//     const res = await fetch(`/api/posts/${post_id}`, {
-//       method: 'DELETE',
-//     });
-//     if (res.ok) setPosts(posts.filter((post) => post.id !== post_id));
-//   };
-
-//   // 수정 버튼 누르면 수정 폼에 값 채워서 보여줌
-//   const handleStartEdit = (post: any) => {
-//     setEditPost({ id: post.id, title: post.title, content: post.content });
-//   };
-
-//   // 수정 폼의 입력값 변경
-//   const handleEditChange = (field: 'title' | 'content', value: string) => {
-//     if (!editPost) return;
-//     setEditPost({ ...editPost, [field]: value });
-//   };
-
-//   // 수정 폼 제출
-//   const handleEditSubmit = async () => {
-//     if (!editPost) return;
-//     const res = await fetch(`/api/posts/${editPost.id}`, {
-//       method: 'PUT',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ title: editPost.title, content: editPost.content }),
-//     });
-//     if (res.ok && selectedCategory) {
-//       await fetchPosts(selectedCategory);
-//       setEditPost(null); // 수정 완료 후 폼 닫기
-//     }
-//   };
-
-//   // 수정 취소
-//   const handleEditCancel = () => {
-//     setEditPost(null);
-//   };
-
-//   return (
-//     <div style={{ display: 'flex' }}>
-//       <aside style={{ width: '200px', marginRight: '1rem' }}>
-//         <h3>카테고리</h3>
-//         {categories.map((cat) => (
-//           <div key={cat}>
-//             <button
-//               onClick={() => setSelectedCategory(cat)}
-//               style={{
-//                 fontWeight: cat === selectedCategory ? 'bold' : 'normal',
-//                 textDecoration: cat === selectedCategory ? 'underline' : 'none',
-//               }}
-//             >
-//               {cat}
-//             </button>
-//           </div>
-//         ))}
-//       </aside>
-
-//       <section style={{ flex: 1 }}>
-//         {selectedCategory ? (
-//           <>
-//             <h3>{selectedCategory} 게시글</h3>
-
-//             {/* 새 글 작성 */}
-//             {!editPost && (
-//               <div style={{ marginBottom: '1rem' }}>
-//                 <input
-//                   placeholder="제목"
-//                   value={newPost.title}
-//                   onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-//                 />
-//                 <textarea
-//                   placeholder="내용"
-//                   value={newPost.content}
-//                   onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-//                 />
-//                 <button onClick={handlePostSubmit}>게시글 작성</button>
-//               </div>
-//             )}
-
-//             {/* 수정 폼 */}
-//             {editPost && (
-//               <div style={{ marginBottom: '1rem' }}>
-//                 <input
-//                   placeholder="제목"
-//                   value={editPost.title}
-//                   onChange={(e) => handleEditChange('title', e.target.value)}
-//                 />
-//                 <textarea
-//                   placeholder="내용"
-//                   value={editPost.content}
-//                   onChange={(e) => handleEditChange('content', e.target.value)}
-//                 />
-//                 <button onClick={handleEditSubmit}>수정 완료</button>
-//                 <button onClick={handleEditCancel} style={{ marginLeft: '0.5rem' }}>
-//                   수정 취소
-//                 </button>
-//               </div>
-//             )}
-
-//             {/* 게시글 목록 */}
-//             <ul>
-//               {posts.map((post) => (
-//                 <li key={post.id}>
-//                   <strong>{post.title}</strong>
-//                   <button onClick={() => handleStartEdit(post)} style={{ marginLeft: '1rem' }}>
-//                     수정
-//                   </button>
-//                   <button onClick={() => handleDelete(post.id)} style={{ marginLeft: '0.5rem' }}>
-//                     삭제
-//                   </button>
-//                 </li>
-//               ))}
-//             </ul>
-//           </>
-//         ) : (
-//           <p>카테고리를 선택하세요.</p>
-//         )}
-//       </section>
-//     </div>
-//   );
-// }

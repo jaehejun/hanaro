@@ -2,7 +2,7 @@
 // category_id 에 해당하는 카테고리 API 응답 처리
 
 // POST 특정 카테고리 게시글 작성(관리자)
-// GET 특정 카테고리 게시글 목록 조회(관리자)
+// GET 특정 카테고리 게시글 목록 조회(모든 사용자자)
 
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma/prisma';
@@ -53,13 +53,13 @@ export async function GET(
     req: NextRequest,
     { params }: {params: { category_id: string } }
 ) {
-    const session = await getServerSession(authOptions);
+    // const session = await getServerSession(authOptions);
     
-    if (!session)
-        return NextResponse.json({ message: 'Forbidden' }, { status: 403 })
-    const user = session.user as any;
-    if (user.role !== 'ADMIN')
-        return NextResponse.json({ message: 'Access denied' }, { status: 403 });
+    // if (!session)
+    //     return NextResponse.json({ message: 'Forbidden' }, { status: 403 })
+    // const user = session.user as any;
+    // if (user.role !== 'ADMIN')
+    //     return NextResponse.json({ message: 'Access denied' }, { status: 403 });
 
     const context = await params;
     const categoryId = context.category_id;

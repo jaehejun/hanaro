@@ -79,7 +79,7 @@ export async function DELETE(
             where: { id: postId },
         });
 
-        if (!deletedPost)
+        if (deletedPost)
             return NextResponse.json(post, { status: 200 });
     }
     catch (error) {
