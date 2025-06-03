@@ -1,7 +1,3 @@
-// app/layout.tsx
-
-// app/layout.tsx
-
 import Link from 'next/link';
 
 export const metadata = {
@@ -22,6 +18,7 @@ export default function RootLayout({
             <Link href="/" style={{ marginRight: '15px' }}>홈</Link>
             <Link href="/api/auth/signin" style={{ marginRight: '15px' }}>로그인</Link>
             <Link href="/signup" style={{ marginRight: '15px' }}>회원가입</Link>
+            <Link href="/profile" style={{ marginRight: '15px' }}>내 정보 수정</Link> {/* 여기 추가 */}
             <Link href="/api/auth/signout" style={{ marginRight: '15px' }}>로그아웃</Link>
             <Link href="/admin">관리자 페이지</Link>
           </nav>

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type Post = { id: string; title: string; content: string };
-const categories = ['javascript', 'typescript', 'react', 'etc'];
+const categories = ['Javascript', 'Typescript', 'React', 'Etc'];
 
 export default function HomePage() {
   const router = useRouter();

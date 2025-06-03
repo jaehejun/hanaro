@@ -20,9 +20,13 @@ export async function POST(req:NextRequest) {
         }
 
         // 이메일 중복 확인
-        const existingUser = await prisma.user.findUnique({ where: { email } });
+        const existingUser = await prisma.user.findFirst({ where: { email } });
         if (existingUser) {
             return NextResponse.json({ error: 'Email already exists' }, { status: 409 });
+        }
+        const existingNickname = await prisma.user.findFirst({ where: { nickname } });
+        if (existingNickname) {
+            return NextResponse.json({ error: 'Nickname already exists' }, { status: 409 });
         }
 
         // 비밀번호 해싱
